@@ -1,11 +1,12 @@
-﻿using System;
+﻿using FrontEndTestApi.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FrontEndTestApi.DataTransferObjects
 {
-    public class Contact
+    public class ContactOutputDto
     {
         public int Id { get; set; }
 
@@ -13,10 +14,12 @@ namespace FrontEndTestApi.DataTransferObjects
 
         public DateTime DateOfBirth { get; set; }
 
+        public string Gender { get; set; }
+
         public int Reputation { get; set; }
 
         public string Description { get; set; }
 
-        public byte[] Avatar { get; set; }
+        public MemoryFile Avatar { get; set; }
     }
 }

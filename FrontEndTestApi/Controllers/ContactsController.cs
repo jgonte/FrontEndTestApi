@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FrontEndTestApi.DataTransferObjects;
+using FrontEndTestApi.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FrontEndTestApi.Controllers
@@ -15,36 +16,51 @@ namespace FrontEndTestApi.Controllers
     {
         // GET: api/<ContactsController>
         [HttpGet]
-        public IEnumerable<Contact> Get()
+        public IEnumerable<ContactOutputDto> Get()
         {
-            return new Contact[]
+            return new ContactOutputDto[]
             {
-                new Contact
+                new ContactOutputDto
                 {
                     Id = 1,
                     Name = "Sarah",
                     DateOfBirth = new DateTime(2003, 6, 26),
+                    Gender = "f",
                     Description = "Very beautiful and smart",
                     Reputation = 10,
-                    Avatar = ImageFromText("S", new Font(FontFamily.GenericMonospace, 15), Color.DarkBlue, Color.Cornsilk)
+                    Avatar = new MemoryFile(
+                        name: "Sarah.jpeg",
+                        type: "image/jpeg",
+                        content: ImageFromText("S", new Font(FontFamily.GenericMonospace, 15), Color.DarkBlue, Color.Cornsilk)
+                    )
                 },
-                new Contact
+                new ContactOutputDto
                 {
                     Id = 2,
                     Name = "Mark",
                     DateOfBirth = new DateTime(1993, 10, 4),
+                    Gender = "m",
                     Description = "Very hard worker and focused",
                     Reputation = 10,
-                    Avatar = ImageFromText("M", new Font(FontFamily.GenericMonospace, 15), Color.DarkGreen, Color.Gray)
+                    Avatar = new MemoryFile(
+                        name: "Mark.jpeg",
+                        type: "image/jpeg",
+                        content: ImageFromText("M", new Font(FontFamily.GenericMonospace, 15), Color.DarkGreen, Color.Gray)
+                    )
                 },
-                new Contact
+                new ContactOutputDto
                 {
                     Id = 3,
                     Name = "Jorge",
                     DateOfBirth = new DateTime(1976, 11, 20),
+                    Gender = "m",
                     Description = "Ugly, stupid but not a bad person",
                     Reputation = 7,
-                    Avatar = ImageFromText("J", new Font(FontFamily.GenericMonospace, 15), Color.DarkRed, Color.Beige)
+                    Avatar = new MemoryFile(
+                        name: "Jorge.jpeg",
+                        type: "image/jpeg",
+                        content: ImageFromText("J", new Font(FontFamily.GenericMonospace, 15), Color.DarkRed, Color.Beige)
+                    )
                 }
             };
         }
@@ -101,20 +117,72 @@ namespace FrontEndTestApi.Controllers
 
         // GET api/<ContactsController>/5
         [HttpGet("{id}")]
-        public Contact Get(int id)
+        public ContactOutputDto Get(int id)
         {
-            return new Contact();
+            if (id < 1 && id > 3)
+            {
+                return null;
+            }
+
+            var contacts = new ContactOutputDto[]
+            {
+                new ContactOutputDto
+                {
+                    Id = 1,
+                    Name = "Sarah",
+                    DateOfBirth = new DateTime(2003, 6, 26),
+                    Gender = "F",
+                    Description = "Very beautiful and smart",
+                    Reputation = 10,
+                    Avatar = new MemoryFile(
+                        name: "Sarah.jpeg",
+                        type: "image/jpeg",
+                        content: ImageFromText("S", new Font(FontFamily.GenericMonospace, 15), Color.DarkBlue, Color.Cornsilk)
+                    )
+                },
+                new ContactOutputDto
+                {
+                    Id = 2,
+                    Name = "Mark",
+                    DateOfBirth = new DateTime(1993, 10, 4),
+                    Gender = "M",
+                    Description = "Very hard worker and focused",
+                    Reputation = 10,
+                    Avatar = new MemoryFile(
+                        name: "Mark.jpeg",
+                        type: "image/jpeg",
+                        content: ImageFromText("M", new Font(FontFamily.GenericMonospace, 15), Color.DarkGreen, Color.Gray)
+                    )
+                },
+                new ContactOutputDto
+                {
+                    Id = 3,
+                    Name = "Jorge",
+                    DateOfBirth = new DateTime(1976, 11, 20),
+                    Gender = "M",
+                    Description = "Ugly, stupid but not a bad person",
+                    Reputation = 7,
+                    Avatar = new MemoryFile(
+                        name: "Jorge.jpeg",
+                        type: "image/jpeg",
+                        content: ImageFromText("J", new Font(FontFamily.GenericMonospace, 15), Color.DarkRed, Color.Beige)
+                    )
+                }
+            };
+
+            return contacts[id - 1];
         }
 
         // POST api/<ContactsController>
         [HttpPost]
-        public void Post([FromBody] Contact contact)
+        public IActionResult Post([FromForm] ContactInputDto contact)
         {
+            return Ok(new ContactPostOutputDto { Id = 5 });
         }
 
         // PUT api/<ContactsController>/5
         [HttpPut()]
-        public void Put([FromBody] Contact contact)
+        public void Put([FromForm] ContactInputDto contact)
         {
         }
 

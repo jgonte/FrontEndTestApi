@@ -28,8 +28,10 @@ namespace FrontEndTestApi
             {
                 options.AddPolicy("DefaultCorsPolicy",
                     builder => builder.WithOrigins(
-                        "http://127.0.0.1:5500"//, 
-                        //"http://174.48.60.7"
+                        "http://127.0.0.1:5500",
+                        "https://127.0.0.1:5501",
+                        "https://127.0.0.1:5502",
+                        "https://localhost:5003"
                     )
                     .AllowAnyMethod()
                     .AllowAnyHeader()
